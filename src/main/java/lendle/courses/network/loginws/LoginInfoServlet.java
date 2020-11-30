@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -94,6 +95,9 @@ public class LoginInfoServlet extends HttpServlet {
         try (PrintWriter out=response.getWriter(); Connection conn=DriverManager.getConnection("jdbc:derby://localhost:1527/sample", "app", "app")) {
             //delete the corresponding user
             String id=request.getParameter("id");
+            PreparedStatement stmt=conn.prepareStatement("delete from login where id=?");
+            stmt.setString(1, id);
+            int ret=stmt.executeUpdate();
             //////////////////////////////
             out.println("success");
         }catch(Exception e){
