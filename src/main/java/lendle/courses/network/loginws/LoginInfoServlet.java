@@ -82,8 +82,13 @@ public class LoginInfoServlet extends HttpServlet {
             //update the corresponding user
             String id=request.getParameter("id");
             String password=request.getParameter("password");
+            PreparedStatement stmt=conn.prepareStatement("update LOGIN set PASSWORD=? where ID=?");
+            stmt.setString(1, password);
+            stmt.setString(2, id);
+            System.out.println(id+". "+password);
+            int ret=stmt.executeUpdate();
             //////////////////////////////
-            out.println("success");
+            out.println(ret);
         }catch(Exception e){
             throw new ServletException(e);
         }
@@ -112,6 +117,11 @@ public class LoginInfoServlet extends HttpServlet {
             //insert the corresponding user
             String id=request.getParameter("id");
             String password=request.getParameter("password");
+            PreparedStatement stmt=
+                    conn.prepareStatement("insert into login (id, password) values (?. ?)");
+            stmt.setString(1, id);
+            stmt.setString(2, password);
+            stmt.executeUpdate();
             //////////////////////////////
             out.println("success");
         }catch(Exception e){

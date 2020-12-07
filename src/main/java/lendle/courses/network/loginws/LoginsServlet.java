@@ -81,16 +81,18 @@ public class LoginsServlet extends HttpServlet {
           response.setContentType("application/json;charset=utf-8");
           try (PrintWriter out=response.getWriter(); Connection conn = DriverManager.getConnection("jdbc:derby://localhost:1527/sample", "app", "app")){
             String id=request.getParameter("id");
-            PreparedStatement stmt=conn.prepareStatement("select * from LOGIN where id=?");
-            stmt.setString(1,id);
-            Map map=new HashMap();
+            PreparedStatement stmt=conn.prepareStatement("select * from LOGIN ");
+            
             ResultSet rs=stmt.executeQuery();
-            if(rs.next()){
+            List list=new ArrayList();
+            while(rs.next()){
+                Map map=new HashMap();
                 map.put("id", rs.getString("id"));
                 map.put("password", rs.getString("password"));
+                list.add(map);
             }
             Gson gson=new Gson();
-            out.println(gson.toJson(map));
+            out.println(gson.toJson(list));
         } catch (SQLException ex) {
             Logger.getLogger(LoginInfoServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
